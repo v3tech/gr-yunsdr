@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+<block>
+	<name>YunSDR Sink</name>
+	<key>yunsdr_sink</key>
+	<category>[V3Best]/YunSDR</category>
+	<flags>throttle</flags>
+	<import>from gnuradio import yunsdr</import>
+	<make>yunsdr.yunsdr_sink($uri, $frequency, $samplerate, $bandwidth, $tx1_en, $tx2_en, $attenuation1, $attenuation2, $rf_port_select, $ref_clock, $vco, $buffer_size, $filter, $auto_filter)</make>
+	<callback>set_params($frequency, $samplerate, $bandwidth, $rf_port_select, $attenuation1, $attenuation2, $filter, $auto_filter)</callback>
+
+	<param>
+		<name>URI</name>
+		<key>uri</key>
+		<value>192.168.1.10</value>
+		<type>string</type>
+	</param>
+
+	<param>
+		<name>LO Frequency</name>
+		<key>frequency</key>
+		<value>2400000000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>Sample rate</name>
+		<key>samplerate</key>
+		<value>2084000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>RF bandwidth</name>
+		<key>bandwidth</key>
+		<value>20000000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>Buffer size</name>
+		<key>buffer_size</key>
+		<value>0x8000</value>
+		<type>int</type>
+		<hide>all</hide>
+	</param>
+
+	<param>
+		<name>Reference Clock</name>
+		<key>ref_clock</key>
+		<type>enum</type>
+		<option>
+			<name>Internel</name>
+			<key>"internal"</key>
+		</option>
+		<option>
+			<name>External</name>
+			<key>"external"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>VCO</name>
+		<key>vco</key>
+		<type>enum</type>
+		<option>
+			<name>AUXDAC1</name>
+			<key>"auxdac1"</key>
+		</option>
+		<option>
+			<name>ADF4001</name>
+			<key>"adf4001"</key>
+		</option>
+	</param>
+
+
+	<param>
+		<name>TX1 Enabled</name>
+		<key>tx1_en</key>
+		<value>True</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+
+	<param>
+		<name>TX2 Enabled</name>
+		<key>tx2_en</key>
+		<value>False</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+	<param>
+		<name>RF Port Select</name>
+		<key>rf_port_select</key>
+		<type>enum</type>
+		<hide>all</hide>
+		<option>
+			<name>A</name>
+			<key>"A"</key>
+		</option>
+		<option>
+			<name>B</name>
+			<key>"B"</key>
+		</option>
+	</param>
+	<param>
+		<name>Attenuation TX1 (dB)</name>
+		<key>attenuation1</key>
+		<value>10.0</value>
+		<type>real</type>
+		<hide>#if $tx1_en() == 'True' then 'none' else 'all'#</hide>
+	</param>
+
+	<param>
+		<name>Attenuation TX2 (dB)</name>
+		<key>attenuation2</key>
+		<value>10.0</value>
+		<type>real</type>
+		<hide>#if $tx2_en() == 'True' then 'none' else 'all'#</hide>
+	</param>
+
+	<param>
+		<name>Filter</name>
+		<key>filter</key>
+		<value></value>
+		<type>file_open</type>
+	</param>
+
+	<param>
+		<name>Filter auto</name>
+		<key>auto_filter</key>
+		<value>True</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+
+
+	<check>sum([$tx1_en, $tx2_en]) &gt; 0</check>
+
+	<!-- if we're below 2.084 MSPS, we require either a user-supplied filter, or the auto filter. -->
+	<check>($samplerate &gt;= 2084000) or (len($filter) &gt; 0) or $auto_filter</check>
+
+	<!-- We can't enable user-supplied filter and auto-filter at the same time. -->
+	<check>not ($auto_filter and len($filter))</check>
+
+	<sink>
+		<name>in</name>
+		<type>complex</type>
+		<nports>sum([$tx1_en, $tx2_en])</nports>
+	</sink>
+</block>
