@@ -176,10 +176,34 @@ $../install/gnss-sdr --config_file=../conf/gnss-sdr_GPS_L1_yunsdr_realtime.conf
 <p align="center">
 <img src="https://github.com/v3best/gr-yunsdr/blob/master/examples/gnss_sdr.png" width="75%" />
 </p> 
- 
 
 
+### gr-dvbt
 
+1. Build and install
+    ```
+    $git clone https://github.com/BogdanDIA/gr-dvbt
+    $cd gr-dvbt
+    $mkdir build
+    $cd build/
+    $cmake ../ -DCMAKE_INSTALL_PREFIX=<gnuradio install prefix>
+    $make && make install && sudo ldconfig
+    ```
 
+2. Run TX
 
+    The simplest way to run DVB-T encoding is to use the gnuradio-companion flowgraphs examples/dvbt_tx_demo.grc. It will start with a MPEG-2 TS file and will eventually generate the 10Msps baseband samples.
+    Open dvbt_tx_demo.grc and run it for transmitting with YunSDR from    samples.ts. This specific flowgraph has the parameters set as: 2k OFDM, FEC code 1/2, Modulation 16-QAM, Guard Interval 1/32.
+
+<p align="center">
+<img src="https://github.com/v3best/gr-yunsdr/blob/master/examples/dvbt_tx.png" width="75%" />
+</p>
+
+3. Run RX
+
+    To run DVB-T decoding just run examples/dvbt_rx_demo.grc. It will take the baseband samples and turn them into MPEG-2 TS file.
+
+<p align="center">
+<img src="https://github.com/v3best/gr-yunsdr/blob/master/examples/dvbt_rx.png" width="75%" />
+</p>
 
