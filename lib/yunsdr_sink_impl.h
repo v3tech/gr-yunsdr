@@ -47,7 +47,7 @@ namespace gr {
                         const char *rf_port_select,
                         const std::string &ref_clock, 
                         const std::string &vco, 
-                        unsigned int buffer_size,
+                        unsigned int vco_param,
                         const char *filter, bool auto_filter);
 
                 ~yunsdr_sink_impl (); 	// public destructor

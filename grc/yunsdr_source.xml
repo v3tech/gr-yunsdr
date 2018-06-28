@@ -5,7 +5,7 @@
 	<category>[V3Best]/YunSDR</category>
 	<flags>throttle</flags>
 	<import>from gnuradio import yunsdr</import>
-	<make>yunsdr.yunsdr_source($uri, $frequency, $samplerate, $bandwidth, $rx1_en, $rx2_en, $gain1, $manual_gain1, $gain2, $manual_gain2, $ref_clock, $vco, $buffer_size, $rf_port_select, $filter, $auto_filter)</make>
+	<make>yunsdr.yunsdr_source($uri, $frequency, $samplerate, $bandwidth, $rx1_en, $rx2_en, $gain1, $manual_gain1, $gain2, $manual_gain2, $ref_clock, $vco, $vco_param, $rf_port_select, $filter, $auto_filter)</make>
 	<callback>set_params($frequency, $samplerate, $bandwidth, $gain1, $manual_gain1, $gain2, $manual_gain2, $rf_port_select, $filter, $auto_filter)</callback>
 
 	<param>
@@ -65,11 +65,10 @@
 	</param>
 
 	<param>
-		<name>Buffer size</name>
-		<key>buffer_size</key>
-		<value>0x8000</value>
+		<name>VCO Parameter</name>
+		<key>vco_param</key>
+		<value>0</value>
 		<type>int</type>
-		<hide>all</hide>
 	</param>
 
 	<param>
@@ -186,6 +185,8 @@
 
 	<!-- if we're below 2.084 MSPS, we require either a user-supplied filter, or the auto filter. -->
 	<check>($samplerate &gt;= 2084000) or (len($filter) &gt; 0) or $auto_filter</check>
+
+	<check>($vco == "adf4001") or ($vco == "auxdac1" and $vco_param &lt;= 3300)</check>
 
 	<!-- We can't enable user-supplied filter and auto-filter at the same time. -->
 	<check>not ($auto_filter and len($filter))</check>

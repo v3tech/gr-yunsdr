@@ -79,7 +79,7 @@ namespace gr {
                     const char *gain2, double gain2_value,
                     const std::string &ref_clock,
                     const std::string &vco,
-                    unsigned int buffer_size,
+                    unsigned int vco_param,
                     const char *rf_port_select, const char *filter,
                     bool auto_filter)
             {
@@ -90,7 +90,7 @@ namespace gr {
                                             gain1, gain1_value,
                                             gain2, gain2_value, 
                                             ref_clock, vco,
-                                            buffer_size,
+                                            vco_param,
                                             rf_port_select, filter,
                                             auto_filter));
             }
@@ -103,7 +103,7 @@ namespace gr {
                 const char *gain2, double gain2_value,
                 const std::string &ref_clock,
                 const std::string &vco,
-                unsigned int buffer_size,
+                unsigned int vco_param,
                 const char *rf_port_select, const char *filter,
                 bool auto_filter)
             : gr::sync_block("yunsdr_source",
@@ -136,14 +136,11 @@ namespace gr {
             else
                 std::cerr << "Configure YunSDR's ref_clock to " << ref_clock << std::endl;
 
-            uint32_t vco_param;
             if (vco == "adf4001") {
                 ret = yunsdr_set_vco_select(_dev, ADF4001);
-                vco_param = 10<<16|26;
                 ret = yunsdr_set_adf4001(_dev, vco_param);
             } else {
                 ret = yunsdr_set_vco_select(_dev, AUXDAC1);
-                vco_param = 1450;
                 ret = yunsdr_set_auxdac1(_dev, vco_param);
             }
             if ( ret < 0 )

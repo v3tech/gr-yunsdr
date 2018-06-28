@@ -72,14 +72,14 @@ namespace gr {
                     const char *rf_port_select,
                     const std::string &ref_clock, 
                     const std::string &vco, 
-                    unsigned int buffer_size,
+                    unsigned int vco_param,
                     const char *filter, bool auto_filter)
             {
                 return gnuradio::get_initial_sptr(
                         new yunsdr_sink_impl(uri, frequency, samplerate, 
                             bandwidth, tx1_en, tx2_en, 
                             attenuation1, attenuation2, rf_port_select,
-                            ref_clock, vco, buffer_size,
+                            ref_clock, vco, vco_param,
                             filter, auto_filter));
             }
 
@@ -94,7 +94,7 @@ namespace gr {
                 const char *rf_port_select,
                 const std::string &ref_clock, 
                 const std::string &vco, 
-                unsigned int buffer_size,
+                unsigned int vco_param,
                 const char *filter, bool auto_filter)
             : gr::sync_block("yunsdr_sink",
                     gr::io_signature::make(
@@ -125,14 +125,11 @@ namespace gr {
             else
                 std::cerr << "Configure YunSDR's ref_clock to " << ref_clock << std::endl;
 
-            uint32_t vco_param;
             if (vco == "adf4001") {
                 ret = yunsdr_set_vco_select(_dev, ADF4001);
-                vco_param = 10<<16|26;
                 ret = yunsdr_set_adf4001(_dev, vco_param);
             } else {
                 ret = yunsdr_set_vco_select(_dev, AUXDAC1);
-                vco_param = 0;
                 ret = yunsdr_set_auxdac1(_dev, vco_param);
             }
             if ( ret < 0 )

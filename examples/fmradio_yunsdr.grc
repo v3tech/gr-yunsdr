@@ -433,10 +433,6 @@
       <value></value>
     </param>
     <param>
-      <key>buffer_size</key>
-      <value>0x8000</value>
-    </param>
-    <param>
       <key>comment</key>
       <value></value>
     </param>
@@ -522,7 +518,11 @@
     </param>
     <param>
       <key>uri</key>
-      <value>192.168.0.135</value>
+      <value>192.168.1.10</value>
+    </param>
+    <param>
+      <key>vco_param</key>
+      <value>1503</value>
     </param>
     <param>
       <key>vco</key>

@@ -270,7 +270,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>fftsize</key>
@@ -393,7 +393,7 @@
     </param>
     <param>
       <key>frequency</key>
-      <value>1500000000</value>
+      <value>int(rf_freq)</value>
     </param>
     <param>
       <key>manual_gain1</key>
@@ -425,7 +425,7 @@
     </param>
     <param>
       <key>rx2_en</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>ref_clock</key>
@@ -437,7 +437,7 @@
     </param>
     <param>
       <key>uri</key>
-      <value>192.168.0.135</value>
+      <value>192.168.1.9</value>
     </param>
     <param>
       <key>vco</key>
@@ -448,12 +448,6 @@
     <source_block_id>yunsdr_source_0</source_block_id>
     <sink_block_id>qtgui_sink_x_0</sink_block_id>
     <source_key>0</source_key>
-    <sink_key>0</sink_key>
-  </connection>
-  <connection>
-    <source_block_id>yunsdr_source_0</source_block_id>
-    <sink_block_id>qtgui_sink_x_0_0</sink_block_id>
-    <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>
 </flow_graph>

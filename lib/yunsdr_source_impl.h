@@ -55,7 +55,7 @@ namespace gr {
                         const char *gain2, double gain2_value,
                         const std::string &ref_clock,
                         const std::string &vco,
-                        unsigned int buffer_size,
+                        unsigned int vco_param,
                         const char *rf_port_select, 
                         const char *filter,
                         bool auto_filter);
