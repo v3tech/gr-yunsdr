@@ -14,3 +14,4 @@
 
 GR_SWIG_BLOCK_MAGIC2(yunsdr, yunsdr_source);
 GR_SWIG_BLOCK_MAGIC2(yunsdr, yunsdr_sink);
+

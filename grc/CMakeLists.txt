@@ -20,5 +20,7 @@
 install(FILES
     yunsdr_sink.xml
     yunsdr_source.xml
+    yunsdr_ss_sink.xml
+    yunsdr_ss_source.xml
 	DESTINATION share/gnuradio/grc/blocks
 )

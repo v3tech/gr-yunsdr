@@ -22,6 +22,6 @@
 ########################################################################
 install(FILES
     api.h
-    yunsdr_source.h yunsdr_sink.h
+    yunsdr_source.h yunsdr_sink.h yunsdr_ss_sink.h yunsdr_ss_source.h
 	DESTINATION ${GR_INCLUDE_DIR}/gnuradio/yunsdr
 )

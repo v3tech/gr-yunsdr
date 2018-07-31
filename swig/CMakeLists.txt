@@ -20,10 +20,10 @@
 ########################################################################
 # Check if there is C++ code at all
 ########################################################################
-if(NOT yunsdr_sources)
+if(NOT yunsdr_sources AND NOT yunsdr_ss_sources)
 	MESSAGE(STATUS "No C++ sources... skipping swig/")
 	return()
-endif(NOT yunsdr_sources)
+endif(NOT yunsdr_sources AND NOT yunsdr_ss_sources)
 
 ########################################################################
 # Include swig generation macros
@@ -46,10 +46,16 @@ endforeach(incdir)
 set(GR_SWIG_LIBRARIES gnuradio-yunsdr)
 GR_SWIG_MAKE(yunsdr_swig yunsdr_swig.i)
 
+set(GR_SWIG_LIBRARIES gnuradio-yunsdr-ss)
+GR_SWIG_MAKE(yunsdr_ss_swig yunsdr_ss_swig.i)
+
+
 ########################################################################
 # Install the build swig module
 ########################################################################
 GR_SWIG_INSTALL(TARGETS yunsdr_swig
+	DESTINATION ${GR_PYTHON_DIR}/gnuradio/yunsdr)
+GR_SWIG_INSTALL(TARGETS yunsdr_ss_swig
 	DESTINATION ${GR_PYTHON_DIR}/gnuradio/yunsdr)
 
 ########################################################################
@@ -58,5 +64,6 @@ GR_SWIG_INSTALL(TARGETS yunsdr_swig
 install(
     FILES
     yunsdr_swig.i
+    yunsdr_ss_swig.i
     DESTINATION ${GR_INCLUDE_DIR}/swig
 )

@@ -27,7 +27,9 @@ import os
 
 try:
     from yunsdr_swig import *
+    from yunsdr_ss_swig import *
 except ImportError:
     dirname, filename = os.path.split(os.path.abspath(__file__))
     __path__.append(os.path.join(dirname, "..", "..", "swig"))
     from yunsdr_swig import *
+    from yunsdr_ss_swig import *

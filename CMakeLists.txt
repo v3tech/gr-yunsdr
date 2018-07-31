@@ -125,8 +125,6 @@ set(GR_REQUIRED_COMPONENTS RUNTIME ANALOG BLOCKS PMT VOLK)
 find_package(Gnuradio PATHS "c:/Program Files/gnuradio/lib/cmake/gnuradio" REQUIRED)
 
 find_package(LibYunSDR REQUIRED)
-#find_library(LIBYUNSDR_LIBRARIES yunsdr)
-#find_path(LIBYUNSDR_INCLUDE_DIRS yunsdr_api.h)
 
 ########################################################################
 # Setup doxygen option
@@ -180,6 +178,16 @@ configure_file(
 
 install(
 	FILES ${CMAKE_CURRENT_BINARY_DIR}/gnuradio-yunsdr.pc
+	DESTINATION ${GR_LIBRARY_DIR}/pkgconfig
+)
+
+configure_file(
+	${CMAKE_CURRENT_SOURCE_DIR}/gnuradio-yunsdr-ss.pc.in
+	${CMAKE_CURRENT_BINARY_DIR}/gnuradio-yunsdr-ss.pc
+	@ONLY)
+
+install(
+	FILES ${CMAKE_CURRENT_BINARY_DIR}/gnuradio-yunsdr-ss.pc
 	DESTINATION ${GR_LIBRARY_DIR}/pkgconfig
 )
 

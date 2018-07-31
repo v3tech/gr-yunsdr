@@ -22,7 +22,7 @@
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
 
-include_directories(${Boost_INCLUDE_DIR} ${LIBYUNSDR_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIR} ${LIBYUNSDR_INCLUDE_DIRS} ${LIBYUNSDR_SS_INCLUDE_DIRS})
 link_directories(${Boost_LIBRARY_DIRS})
 
 list(APPEND yunsdr_sources
@@ -30,11 +30,17 @@ list(APPEND yunsdr_sources
     yunsdr_sink_impl.cc
 )
 
+list(APPEND yunsdr_ss_sources
+	yunsdr_ss_source_impl.cc
+    yunsdr_ss_sink_impl.cc
+)
+
 set(yunsdr_sources "${yunsdr_sources}" PARENT_SCOPE)
-if(NOT yunsdr_sources)
+set(yunsdr_ss_sources "${yunsdr_ss_sources}" PARENT_SCOPE)
+if(NOT yunsdr_sources AND NOT yunsdr_ss_sources)
 	MESSAGE(STATUS "No C++ sources... skipping lib/")
 	return()
-endif(NOT yunsdr_sources)
+endif(NOT yunsdr_sources AND NOT yunsdr_ss_sources)
 
 if ("${PC_GNURADIO_RUNTIME_VERSION}" VERSION_LESS 3.8.0)
 	set(GR_IS_VERSION_3_7_OR_LESS ON)
@@ -56,8 +62,22 @@ set_target_properties(gnuradio-yunsdr PROPERTIES
 	DEFINE_SYMBOL "gnuradio_yunsdr_EXPORTS"
 )
 
+add_library(gnuradio-yunsdr-ss SHARED ${yunsdr_ss_sources})
+target_link_libraries(gnuradio-yunsdr-ss
+	${Boost_LIBRARIES}
+	${LIBYUNSDR_SS_LIBRARIES}
+	${GNURADIO_ALL_LIBRARIES})
+set_target_properties(gnuradio-yunsdr-ss PROPERTIES
+	VERSION ${GR_YUNSDR_VERSION}
+	SOVERSION ${GR_YUNSDR_VERSION_MAJOR}
+	DEFINE_SYMBOL "gnuradio_yunsdr_EXPORTS"
+)
+
 if(APPLE)
     set_target_properties(gnuradio-yunsdr PROPERTIES
+        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+    )
+    set_target_properties(gnuradio-yunsdr-ss PROPERTIES
         INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
     )
 endif(APPLE)
@@ -71,6 +91,11 @@ install(TARGETS gnuradio-yunsdr
 	RUNTIME DESTINATION ${GR_RUNTIME_DIR} # .dll file
 )
 
+install(TARGETS gnuradio-yunsdr-ss
+	LIBRARY DESTINATION ${GR_LIBRARY_DIR} # .so/.dylib file
+	ARCHIVE DESTINATION ${GR_LIBRARY_DIR} # .lib file
+	RUNTIME DESTINATION ${GR_RUNTIME_DIR} # .dll file
+)
 
 ########################################################################
 # Setup the include and linker paths

@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<block>
+	<name>YunSDR(PCIE/SFP) Source</name>
+	<key>yunsdr_ss_source</key>
+	<category>[V3Best]/YunSDR</category>
+	<flags>throttle</flags>
+	<import>from gnuradio import yunsdr</import>
+	<make>yunsdr.yunsdr_ss_source($uri, $frequency, $samplerate, $bandwidth, $rx1_en, $rx2_en, $gain1, $manual_gain1, $gain2, $manual_gain2, $ref_clock, $vco, $vco_param, $rf_port_select, $filter, $auto_filter)</make>
+	<callback>set_params($frequency, $samplerate, $bandwidth, $gain1, $manual_gain1, $gain2, $manual_gain2, $rf_port_select, $filter, $auto_filter)</callback>
+
+	<param>
+		<name>URI</name>
+		<key>uri</key>
+		<value>pcie:0</value>
+		<type>string</type>
+	</param>
+
+	<param>
+		<name>LO Frequency</name>
+		<key>frequency</key>
+		<value>2400000000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>Sample rate</name>
+		<key>samplerate</key>
+		<value>2084000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>RF bandwidth</name>
+		<key>bandwidth</key>
+		<value>20000000</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>Reference Clock</name>
+		<key>ref_clock</key>
+		<type>enum</type>
+		<option>
+			<name>Internel</name>
+			<key>"internal"</key>
+		</option>
+		<option>
+			<name>External</name>
+			<key>"external"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>VCO</name>
+		<key>vco</key>
+		<type>enum</type>
+		<option>
+			<name>AUXDAC1</name>
+			<key>"auxdac1"</key>
+		</option>
+		<option>
+			<name>ADF4001</name>
+			<key>"adf4001"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>VCO Parameter</name>
+		<key>vco_param</key>
+		<value>0</value>
+		<type>int</type>
+	</param>
+
+	<param>
+		<name>RX1 Enabled</name>
+		<key>rx1_en</key>
+		<value>True</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+
+	<param>
+		<name>RX2 Enabled</name>
+		<key>rx2_en</key>
+		<value>False</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+
+	<param>
+		<name>Gain Mode (RX1)</name>
+		<key>gain1</key>
+		<type>enum</type>
+		<hide>#if $rx1_en() == 'True' then 'none' else 'all'#</hide>
+		<option>
+			<name>Manual</name>
+			<key>"manual"</key>
+		</option>
+		<option>
+			<name>Slow</name>
+			<key>"slow_attack"</key>
+		</option>
+		<option>
+			<name>Fast</name>
+			<key>"fast_attack"</key>
+		</option>
+		<option>
+			<name>Hybrid</name>
+			<key>"hybrid"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Manual Gain (RX1)(dB)</name>
+		<key>manual_gain1</key>
+		<value>64.0</value>
+		<type>real</type>
+		<hide>#if $gain1() == '"manual"' and $rx1_en() == 'True' then 'none' else 'all'#</hide>
+	</param>
+
+	<param>
+		<name>Gain Mode (RX2)</name>
+		<key>gain2</key>
+		<type>enum</type>
+		<hide>#if $rx2_en() == 'True' then 'none' else 'all'#</hide>
+		<option>
+			<name>Manual</name>
+			<key>"manual"</key>
+		</option>
+		<option>
+			<name>Slow</name>
+			<key>"slow_attack"</key>
+		</option>
+		<option>
+			<name>Fast</name>
+			<key>"fast_attack"</key>
+		</option>
+		<option>
+			<name>Hybrid</name>
+			<key>"hybrid"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Manual Gain (RX2)(dB)</name>
+		<key>manual_gain2</key>
+		<value>64.0</value>
+		<type>real</type>
+		<hide>#if $gain2() == '"manual"' and $rx2_en() == 'True' then 'none' else 'all'#</hide>
+	</param>
+
+	<param>
+		<name>RF Port Select</name>
+		<key>rf_port_select</key>
+		<type>enum</type>
+		<option>
+			<name>RX</name>
+			<key>"RX"</key>
+		</option>
+		<option>
+			<name>TRX</name>
+			<key>"TRX"</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Filter</name>
+		<key>filter</key>
+		<value></value>
+		<type>file_open</type>
+	</param>
+
+	<param>
+		<name>Filter auto</name>
+		<key>auto_filter</key>
+		<value>True</value>
+		<type>enum</type>
+		<option><name>True</name><key>True</key></option>
+		<option><name>False</name><key>False</key></option>
+	</param>
+
+	<check>sum([$rx1_en, $rx2_en]) &gt; 0</check>
+
+	<!-- if we're below 2.084 MSPS, we require either a user-supplied filter, or the auto filter. -->
+	<check>($samplerate &gt;= 2084000) or (len($filter) &gt; 0) or $auto_filter</check>
+
+	<check>($vco == "adf4001") or ($vco == "auxdac1" and $vco_param &lt;= 3300)</check>
+
+	<!-- We can't enable user-supplied filter and auto-filter at the same time. -->
+	<check>not ($auto_filter and len($filter))</check>
+
+	<source>
+		<name>out</name>
+		<type>complex</type>
+		<nports>sum([$rx1_en, $rx2_en])</nports>
+	</source>
+</block>

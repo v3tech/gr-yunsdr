@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${exec_prefix}/@GR_LIBRARY_DIR@
+includedir=${prefix}/@GR_INCLUDE_DIR@
+
+Name: gnuradio-yunsdr-ss
+Description: GNU Radio blocks for the YunSDR(PCIE/SFP) devices
+Requires: gnuradio-runtime gnuradio-analog gnuradio-blocks
+Version: @GR_YUNSDR_VERSION@
+Libs: -L${libdir} -lgnuradio-yunsdr-ss -lgnuradio-analog -lgnuradio-blocks -lyunsdr_ss
+Cflags: -I${includedir}
