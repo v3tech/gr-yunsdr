@@ -98,7 +98,7 @@ namespace gr {
             int ret;
 
             _ipaddr = uri;
-            std::cerr << "Using YunSDR URI " << _ipaddr.c_str() << std::endl;
+            std::cerr << "Using YunSDRSS URI " << _ipaddr.c_str() << std::endl;
 
             _dev = yunsdr_open_device(_ipaddr.c_str());
             if(_dev == NULL)
